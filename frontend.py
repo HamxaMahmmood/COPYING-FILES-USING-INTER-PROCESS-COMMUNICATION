@@ -26,8 +26,8 @@ def update_folder2_files():
 
 def copy_from_folder1():
     selected_indices = listbox1.curselection()
-    if len(selected_indices) == 0:
-        tmsg.showerror("ERROR", "Files not selected!")
+    if len(selected_indices) == 0 or len(selected_indices) % 2 == 1:
+        tmsg.showerror("ERROR", "Files selection Error!\nPlease select even files")
         return
     selected_entries = [folder1_files[i] for i in selected_indices]
     selected_entries.reverse();
@@ -76,7 +76,59 @@ def copy_from_folder1():
             print("Fork failed")
     update_folder2_files()
     return
+
+
 def copy_from_folder2():
+    selected_indices = listbox2.curselection()
+    if len(selected_indices) == 0 or len(selected_indices) % 2 == 1:
+        tmsg.showerror("ERROR", "Files selection Error!\nPlease select even files")
+        return
+    selected_entries = [folder2_files[i] for i in selected_indices]
+    selected_entries.reverse();
+    # Create pipes for folder names
+    r_folder1, w_folder1 = os.pipe()
+    r_folder2, w_folder2 = os.pipe()
+     # Create two pipes
+    while len(selected_entries) != 0:
+        r1, w1 = os.pipe()
+        r2, w2 = os.pipe()
+        
+        # Fork a child process
+        pid = os.fork()
+        
+        if pid > 0:  # Parent process
+            os.close(r1)  # Close the read end of the first pipe in the parent
+            os.close(r2)  # Close the read end of the second pipe in the parent
+            os.close(r_folder1)
+            os.close(r_folder2)
+            w1 = os.fdopen(w1, 'w')  # Open the write end of the first pipe in write mode
+            w2 = os.fdopen(w2, 'w')  # Open the write end of the second pipe in write mode
+            w1.write(selected_entries.pop())  # Write the first message to the first pipe
+            w1.close()  # Close the write end of the first pipe
+            w2.write(selected_entries.pop())  # Write the second message to the second pipe
+            w2.close()  # Close the write end of the second pipe
+            
+            w_folder1 = os.fdopen(w_folder1, 'w')
+            w_folder1.write("folder2/")
+            w_folder1.close()
+            
+            w_folder2 = os.fdopen(w_folder2, 'w')
+            w_folder2.write("folder1/")
+            w_folder2.close()
+            os.wait()
+        elif pid == 0:  # Child process
+            os.close(w1)  # Close the write end of the first pipe in the child
+            os.close(w2)  # Close the write end of the second pipe in the child
+            os.dup2(r1, 0)  # Redirect stdin to the read end of the first pipe
+            os.dup2(r2, 3)  # Redirect a new file descriptor (3) to the read end of the second pipe
+            os.close(w_folder1)
+            os.close(w_folder2)
+            os.dup2(r_folder1, 4)  
+            os.dup2(r_folder2, 5) 
+            os.execl("./backend", "./backend")  # Execute the C program
+        else:
+            print("Fork failed")
+    update_folder1_files()
     return
 
 
@@ -104,8 +156,7 @@ scrollbar1.config(command=listbox1.yview)
 scrollbar1.pack(side=tk.RIGHT, fill=tk.Y)
 listbox1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-button = tk.Button(root, text="Copy to folder2", command=copy_from_folder1)
-button.place(x = 0,y = 600)
+tk.Button(root, text="Copy to folder2", command=copy_from_folder1).place(x = 0,y = 600)
 
 
 
@@ -120,6 +171,7 @@ scrollbar2.config(command=listbox2.yview)
 scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
 listbox2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
+tk.Button(root, text="Copy to folder1", command=copy_from_folder2).place(x = 600,y = 600)
 
 
 
