@@ -78,6 +78,7 @@ def copy_from_folder1():
     while len(selected_entries) != 0:
         if len(selected_entries) == 1:
             copy_one_file("folder1/","folder2/",selected_entries.pop())
+            tmsg.showinfo("SUCCESS","Files copied Successfully")
             return
         r1, w1 = os.pipe()
         r2, w2 = os.pipe()
@@ -120,6 +121,7 @@ def copy_from_folder1():
         else:
             print("Fork failed")
     update_folder2_files()
+    tmsg.showinfo("SUCCESS","Files copied Successfully")
     return
 
 
@@ -135,6 +137,7 @@ def copy_from_folder2():
     while len(selected_entries) != 0:
         if len(selected_entries) == 1:
             copy_one_file("folder2/","folder1/",selected_entries.pop())
+            tmsg.showinfo("SUCCESS","Files copied Successfully") 
             return
         r1, w1 = os.pipe()
         r2, w2 = os.pipe()
@@ -177,6 +180,7 @@ def copy_from_folder2():
         else:
             print("Fork failed")
     update_folder1_files()
+    tmsg.showinfo("SUCCESS","Files copied Successfully")
     return
 
 
