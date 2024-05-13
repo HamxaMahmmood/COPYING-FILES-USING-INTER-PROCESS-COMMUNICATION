@@ -194,33 +194,46 @@ def copy_from_folder2():
 root = tk.Tk()
 root.config(bg="black")
 root.title("Multi-Selection Dropdown Example")
+root.minsize(1500,900)
+
+tk.Label(root, text="AN INTER-PROCESS COMMUNICATOR",fg="beige",bg="black",height=3,width=150,font=("Helvetica", 30, "bold"),highlightthickness=3,highlightcolor="beige").pack(side=tk.TOP)
+
+tk.Label(root, text="FOLDER 1 CONTENT",fg="beige",bg="black",font=("Helvetica", 15, "bold"),highlightthickness=2,highlightcolor="beige",padx=10,pady=5,width=43).place(x=200,y=260)
+
+tk.Label(root, text="FOLDER 2 CONTENT",fg="beige",bg="black",font=("Helvetica", 15, "bold"),highlightthickness=2,highlightcolor="beige",padx=10,pady=5,width=43).place(x=1222,y=260)
 
 # FOLDER 1 LISTBOX
-listbox_frame1 = tk.Frame(root)
-listbox_frame1.pack(side=tk.LEFT, padx=5, pady=50)
-scrollbar1 = tk.Scrollbar(listbox_frame1, orient=tk.VERTICAL)
-listbox1 = tk.Listbox(listbox_frame1, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar1.set)
+listbox_frame1 = tk.Frame(root, height=50 , width=60)
+listbox_frame1.pack(side=tk.LEFT, padx=200, pady=100)
+scrollbar1 = tk.Scrollbar(listbox_frame1, orient=tk.VERTICAL,bg="black")
+listbox1 = tk.Listbox(listbox_frame1, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar1.set, height=30, width=60,bg="beige")
 scrollbar1.config(command=listbox1.yview)
 scrollbar1.pack(side=tk.RIGHT, fill=tk.Y)
 listbox1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-tk.Button(root, text="Copy to folder2", command=copy_from_folder1).place(x = 0,y = 600)
+tk.Button(root, text="Copy to folder2", command=copy_from_folder1, bg="beige",height=2,width=15).place(x = 878,y = 700)
 
 
 
 
 # FOLDER 2 LISTBOX
 
-listbox_frame2 = tk.Frame(root)
-listbox_frame2.pack(side=tk.RIGHT, padx=5, pady=50)
-scrollbar2 = tk.Scrollbar(listbox_frame2, orient=tk.VERTICAL)
-listbox2 = tk.Listbox(listbox_frame2, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar2.set)
+listbox_frame2 = tk.Frame(root , height=50, width=60)
+listbox_frame2.pack(side=tk.RIGHT, padx=200, pady=100)
+scrollbar2 = tk.Scrollbar(listbox_frame2, orient=tk.VERTICAL,bg="black")
+listbox2 = tk.Listbox(listbox_frame2, selectmode=tk.MULTIPLE, yscrollcommand=scrollbar2.set , height=30, width=60,bg="beige")
 scrollbar2.config(command=listbox2.yview)
 scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
 listbox2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-tk.Button(root, text="Copy to folder1", command=copy_from_folder2).place(x = 600,y = 600)
+tk.Button(root, text="Copy to folder1", command=copy_from_folder2,bg="beige",height=2,width=15).place(x = 878,y = 625)
 
+
+
+# Add text inside the frame
+
+label = tk.Label(root, text="INSTRUCTIONS:\nSelect Any file by clicking on it and then press\n the COPY TO button to paste the file into\n the other folder, You can also chose multiple\n files at a time.", bg="black",highlightthickness=2, highlightbackground="beige",fg="beige")
+label.place(x=800,y=350)
 
 
 
