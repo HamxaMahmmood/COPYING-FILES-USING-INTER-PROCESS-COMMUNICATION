@@ -24,20 +24,65 @@ def update_folder2_files():
         listbox2.insert(tk.END, file)
     return
 
+
+def copy_one_file(source,destination,filename):
+    r1, w1 = os.pipe()
+    r2, w2 = os.pipe()
+    r3, w3 = os.pipe()
+    
+    # Fork a child process
+    pid = os.fork()
+    
+    if pid > 0:  # Parent process
+        os.close(r1)  # Close the read end of the first pipe in the parent
+        os.close(r2)
+        os.close(r3)# Close the read end of the second pipe in the parent
+        w1 = os.fdopen(w1, 'w')  # Open the write end of the first pipe in write mode
+        w2 = os.fdopen(w2, 'w')
+        w3 = os.fdopen(w3, 'w')# Open the write end of the second pipe in write mode
+        w1.write(source)  # Write the first message to the first pipe
+        w1.close()  # Close the write end of the first pipe
+        w2.write(destination)  # Write the second message to the second pipe
+        w2.close()
+        w3.write(filename)
+        w3.close()# Close the write end of the second pipe
+        
+       
+        os.wait()
+    elif pid == 0:  # Child process
+        os.close(w1)  # Close the write end of the first pipe in the child
+        os.close(w2)
+        os.close(w3)# Close the write end of the second pipe in the child
+        os.dup2(r1, 0)  # Redirect stdin to the read end of the first pipe
+        os.dup2(r2, 3)
+        os.dup2(r3, 4)# Redirect a new file descriptor (3) to the read end of the second pipe
+        os.execl("./onefile", "./onefile")  # Execute the C program
+    else:
+        print("Fork failed")
+    if destination == "folder2/":
+        update_folder2_files()
+    else:
+        update_folder1_files()
+    
+    return
+
 def copy_from_folder1():
     selected_indices = listbox1.curselection()
-    if len(selected_indices) == 0 or len(selected_indices) % 2 == 1:
-        tmsg.showerror("ERROR", "Files selection Error!\nPlease select even files")
+    if len(selected_indices) == 0:
+        tmsg.showerror("ERROR", "No Files Selected!")
         return
     selected_entries = [folder1_files[i] for i in selected_indices]
     selected_entries.reverse();
     # Create pipes for folder names
-    r_folder1, w_folder1 = os.pipe()
-    r_folder2, w_folder2 = os.pipe()
      # Create two pipes
     while len(selected_entries) != 0:
+        if len(selected_entries) == 1:
+            copy_one_file("folder1/","folder2/",selected_entries.pop())
+            return
         r1, w1 = os.pipe()
         r2, w2 = os.pipe()
+        r_folder1, w_folder1 = os.pipe()
+        r_folder2, w_folder2 = os.pipe()
         
         # Fork a child process
         pid = os.fork()
@@ -80,18 +125,21 @@ def copy_from_folder1():
 
 def copy_from_folder2():
     selected_indices = listbox2.curselection()
-    if len(selected_indices) == 0 or len(selected_indices) % 2 == 1:
-        tmsg.showerror("ERROR", "Files selection Error!\nPlease select even files")
+    if len(selected_indices) == 0:
+        tmsg.showerror("ERROR", "No Files Selected!")
         return
     selected_entries = [folder2_files[i] for i in selected_indices]
     selected_entries.reverse();
     # Create pipes for folder names
-    r_folder1, w_folder1 = os.pipe()
-    r_folder2, w_folder2 = os.pipe()
      # Create two pipes
     while len(selected_entries) != 0:
+        if len(selected_entries) == 1:
+            copy_one_file("folder2/","folder1/",selected_entries.pop())
+            return
         r1, w1 = os.pipe()
         r2, w2 = os.pipe()
+        r_folder1, w_folder1 = os.pipe()
+        r_folder2, w_folder2 = os.pipe()
         
         # Fork a child process
         pid = os.fork()
@@ -181,7 +229,6 @@ tk.Button(root, text="Copy to folder1", command=copy_from_folder2).place(x = 600
 update_folder1_files()
 update_folder2_files()
 
-print(folder1_files)
-print(folder2_files)
+
 
 root.mainloop()
