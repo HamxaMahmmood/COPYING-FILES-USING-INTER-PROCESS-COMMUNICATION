@@ -215,7 +215,7 @@ scrollbar1.config(command=listbox1.yview)
 scrollbar1.pack(side=tk.RIGHT, fill=tk.Y)
 listbox1.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-tk.Button(root, text="COPY TO FOLDER 2", command=copy_from_folder1, bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 700)
+tk.Button(root, text="COPY TO FOLDER 2", command=copy_from_folder1, bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 625)
 
 
 
@@ -230,14 +230,14 @@ scrollbar2.config(command=listbox2.yview)
 scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
 listbox2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-tk.Button(root, text="COPY TO FOLDER 1", command=copy_from_folder2,bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 350)
+tk.Button(root, text="COPY TO FOLDER 1", command=copy_from_folder2,bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 700)
 
 
 
 # Add text inside the frame
 
 label = tk.Label(root, text="INSTRUCTIONS:\nSelect Any file by clicking on it and then press\n the COPY TO button to paste the file into\n the other folder, You can also chose multiple\n files at a time.", bg="black",highlightthickness=2, highlightbackground="beige",fg="beige")
-label.place(x=800,y=625)
+label.place(x=800,y=350)
 
 
 
