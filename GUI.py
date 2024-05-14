@@ -197,7 +197,7 @@ def copy_from_folder2():
 
 root = tk.Tk()
 root.config(bg="black")
-root.title("Multi-Selection Dropdown Example")
+root.title("INTER-PROCESS COMMUNICATOR")
 root.minsize(1500,900)
 
 tk.Label(root, text="AN INTER-PROCESS COMMUNICATOR",fg="beige",bg="black",height=3,width=150,font=("Helvetica", 30, "bold"),highlightthickness=3,highlightcolor="beige").pack(side=tk.TOP)
@@ -230,14 +230,14 @@ scrollbar2.config(command=listbox2.yview)
 scrollbar2.pack(side=tk.RIGHT, fill=tk.Y)
 listbox2.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-tk.Button(root, text="COPY TO FOLDER 1", command=copy_from_folder2,bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 625)
+tk.Button(root, text="COPY TO FOLDER 1", command=copy_from_folder2,bg="beige",height=2,width=15,font=("helvetica",12,'bold')).place(x = 878,y = 350)
 
 
 
 # Add text inside the frame
 
 label = tk.Label(root, text="INSTRUCTIONS:\nSelect Any file by clicking on it and then press\n the COPY TO button to paste the file into\n the other folder, You can also chose multiple\n files at a time.", bg="black",highlightthickness=2, highlightbackground="beige",fg="beige")
-label.place(x=800,y=350)
+label.place(x=800,y=625)
 
 
 
