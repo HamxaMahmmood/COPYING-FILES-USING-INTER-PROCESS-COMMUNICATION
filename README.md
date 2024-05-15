@@ -45,6 +45,5 @@ Notes:
 
 Credits:
 - Developed by:
-  -Hamza Mahmood (413603)
-  -Abdul Rehman (408651)
+  -Hamza Mahmood
 
